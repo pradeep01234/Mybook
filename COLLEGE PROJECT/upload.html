@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+   
+  
+  <div class="st">
+    <div>
+
+      <form id="form">
+        <label for="num">Enter serial number</label>
+        <input type="number" placeholder="serial number" id="sno">
+      
+        <br>
+        <br>
+        <label for="sub">Enter subject name</label>
+        <input type="text" placeholder="enter topic/subject" id="topic">
+        <br>
+        <br>
+        <input type="file" id="file">
+   <br>
+        <br>
+        <button type="submit" class="btn">submit</button>
+    </form>
+    </div>
+   
+  </div>
+  
+  
+
+
+
+
+    <script>
+        document.getElementById("form").addEventListener('submit', function (e) { 
+            e.preventDefault();
+            
+
+           const userFile = document.getElementById("file").files[0];
+           
+           const formData = new FormData();
+
+           formData.append('user_file', userFile, `${document.getElementById("topic").value}.pdf`);
+
+           fetch('http://localhost:4000/uploadnotes',{
+            method:"POST",
+            body:formData
+           })
+           .then(res=>res.json())
+           .then(data=>
+           {
+               console.log(data)
+               calling();
+           })
+           .catch(err=>console.log(err))
+
+         })
+         var calling = ()=>{
+            var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "sno": Number(document.getElementById("sno").value),
+  "name": document.getElementById("topic").value,
+  "link": `${document.getElementById("topic").value}.pdf`
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("http://localhost:4000/uploadnotesdata", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+         }
+    </script>
+</body>
+</html>

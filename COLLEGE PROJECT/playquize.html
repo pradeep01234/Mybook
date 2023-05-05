@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bod"><div class="navigation">
+        <ul>
+            <li class="list">
+                <a href="student.html">
+                    <span class="icon">
+                        <ion-icon name="arrow-back-outline"></ion-icon>
+                    </span>
+                    <br> 
+                    <span class="text">back</span>
+            </a>
+            </li>
+            <li class="list">
+                <a href="upload.html">
+                    <span class="icon"><ion-icon name="cloud-download-outline"></ion-icon></span>
+                    <br>
+                    <span class="text"> Q & A</span>
+                </a>
+            </li>
+            <li class="list">
+                <a href="playquize.html">
+                    <span class="icon"><ion-icon name="alarm-outline"></ion-icon></span>
+                    <br>
+                    <span class="text">Take Quize</span>
+                </a>
+            </li>
+            <li class="list">
+                <a href="notes.html">
+                    <span class="icon"><ion-icon name="cloud-download-outline"></ion-icon></span>
+                    <br>
+                    <span class="text"> pdf Notes</span>
+                </a>
+            </li>
+            <li class="list">
+                <a href="#">
+                    <span class="icon"><ion-icon name="barbell-outline"></ion-icon></span>
+                    <br>
+                    <span class="text">About us</span>
+                </a>
+            </li>
+           
+        </ul>
+       
+    </div></div>
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <div>
+        <div class="question1">
+            <div class="question"> 
+                <h2 id="question">questions</h2>
+            </div>
+             <div class="option">
+               <div class="o">
+                <div class="option1">
+                    <input type="radio" name="u_ans" id="ans1">
+                    <h2 id="option1">option</h2>
+                  </div>
+
+                  <div class="option1">
+                    <input type="radio" name="u_ans" id="ans2">
+                      <h2 id="option2">option</h2>
+                  </div>             
+               </div>
+               
+               <div class="o">
+                <div class="option1">
+                    <input type="radio" name="u_ans" id="ans3">
+                    <h2 id="option3">option</h2>
+                </div>
+
+
+                <div class="option1">
+                    <input type="radio" name="u_ans" id="ans4">
+                    <h2 id="option4">option</h2>                   
+                </div>
+              
+               </div>
+         
+         
+             </div>
+        </div>
+    </div>
+    <div class="bto">
+        <div class="score">
+            <h2>Score:
+                <span id="showscore">00</span>
+                /
+                <span id="tatalscore">10</span>
+            </h2>
+                    </div>
+        <div class="next">
+            <div><ion-icon name="chevron-forward-outline"></ion-icon>
+            </div>
+            <div>  <h3 onclick="match()">Next</h3></div>
+        </div>
+       
+      </div>
+
+      <script>
+
+
+
+        var total;
+
+        fetch("http://localhost:4000/count")
+        .then(response => response.json())
+        .then(result => {
+            total=result.counting;
+            document.getElementById("tatalscore").innerText=total;
+        })
+        .catch(error => console.log('error', error));
+
+
+
+
+        var q = 1;
+        var score = 0;
+        var match = ()=>{
+            var c = false;
+            if(score==total){
+                alert(" your highest score is :"+score);
+                window.location.href = "student.html";
+            }
+
+
+
+            fetch(`http://localhost:4000/id?id=${q}`)
+            .then(response => response.json())
+            .then(result => 
+            {
+
+                
+            document.getElementById('question').innerText=result.question;   
+            document.getElementById('option1').innerText=result.op_1;   
+            document.getElementById('option2').innerText=result.op_2;   
+            document.getElementById('option3').innerText=result.op_3;   
+            document.getElementById('option4').innerText=result.op_4;   
+
+
+            document.getElementById('ans1').value=result.op_1;   
+            document.getElementById('ans2').value=result.op_2;   
+            document.getElementById('ans3').value=result.op_3;   
+            document.getElementById('ans4').value=result.op_4;   
+
+            console.log(!result)
+            var u_a = document.getElementsByName("u_ans");
+            for(var i=0;i<u_a.length;i++){
+                if(u_a[i].checked){
+                    console.log(u_a[i].value);
+                    if((u_a[i].value).localeCompare(result.ans)==0){
+                        c = true;
+                        console.log(true);
+                            q++;
+                            score++;
+                            document.getElementById("showscore").innerText=score;
+                            match();
+                    }
+                  
+                }
+                    }
+                    
+
+            }
+            )
+            .catch(error => console.log('error', error));
+        }
+        var next = ()=>{
+            document.getElementById("showscore").innerText=score;
+            q++;
+            match();
+        }
+
+        
+        function start(){
+            var a = confirm("start the quiz?");
+            if(a==true){
+                match();
+            }
+        }
+        start();
+
+    </script>
+
+
+</body>
+</html>

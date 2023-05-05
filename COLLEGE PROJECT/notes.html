@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <link rel="stylesheet" href="style.css">
+  
+</head>
+<body >
+
+<div class="bod"><div class="navigation">
+    <ul>
+        <li class="list">
+            <a href="index.html">
+                <span class="icon">
+                    <ion-icon name="log-out-outline"></ion-icon>
+                </span>
+                <br> 
+                <span class="text">Logout</span>
+        </a>
+        </li>
+        <li class="list">
+            <a href="upload.html">
+                <span class="icon"><ion-icon name="cloud-download-outline"></ion-icon></span>
+                <br>
+                <span class="text"> Upload Q & A</span>
+            </a>
+        </li>
+        <li class="list">
+            <a href="createquize.html">
+                <span class="icon"><ion-icon name="alarm-outline"></ion-icon></span>
+                <br>
+                <span class="text">Create Quize</span>
+            </a>
+        </li>
+        <li class="list">
+            <a href="#">
+                <span class="icon"><ion-icon name="cloud-download-outline"></ion-icon></span>
+                <br>
+                <span class="text"> pdf Notes</span>
+            </a>
+        </li>
+        <li class="list">
+            <a href="#">
+                <span class="icon"><ion-icon name="barbell-outline"></ion-icon></span>
+                <br>
+                <span class="text">About us</span>
+            </a>
+        </li>
+       
+    </ul>
+   
+</div></div>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<div  class="t1">
+    <div class="t2">
+    <table border="2px" cellpadding="10px" id="put" class="put" >
+        <tr>
+            <td>S No.</td>
+            <td>Name</td>
+            <td>Download</td>
+        </tr>
+        
+        
+    </table>
+</div>
+</div>
+<script>
+    var c = 0;
+
+
+fetch("http://localhost:4000/notes")
+.then(response => response.json())
+.then(o => 
+{
+for(var i=0;i<o.length;i++){
+        c++;
+        document.getElementById("put").innerHTML+=`
+        <tr class="pu">
+        <td id="s${c}">${o[i].sno}</td>
+        <td id="n${c}">${o[i].name}</td>
+        <td id="l${c}"><a href="http://localhost:4000/${o[i].link}">click here</a></td>    
+        </tr>        
+        `
+    }
+}
+)
+.catch(error => console.log('error', error));
+
+
+
+    
+    
+</script>
+</body>
+</html>
